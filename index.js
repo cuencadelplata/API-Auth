@@ -55,16 +55,6 @@ function verificarToken (req, res, next){
 };
 
 
-
-app.post('/usuario', (req, res)=> {
-    res.json({
-        nombreUsuario: 'Juan',
-        password: 'miPassword'
-    });
-})
-
-app.post('/autenticar',(req, res)=>{})
-
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Servidor escuchando en http://localhost:${port}`)
 })

@@ -1,7 +1,26 @@
+// npm install express
+// npm install jsonwebtoken
+// npm install nodemonnpm install -g nodemon
+// npm install body-parser
+// npm install npm install express-mysql-session --save
+// npm install mysql
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
-
+// -----------
+// SQL Connection
+var mysql = require('mysql');
+var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
+var options = {
+    host: 'localhost',    
+    user: 'rootapi',
+    password: 'rootuser',  
+    port: 3306
+};
+var connection = mysql.createConnection(options); // or mysql.createPool(options);
+var sessionStore = new MySQLStore({}/* session store options */, connection);
+// ---------
 const app = express()
 const port = 3000
 
@@ -34,7 +53,7 @@ app.post('/api/auth/login', (req, res)=> {
     }
 })
 
-function esValido(usuario, password){
+function esValido(usuario, password){    
     console.log(usuario);
     console.log(password);
     console.log((usuario==password));

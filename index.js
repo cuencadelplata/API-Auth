@@ -7,33 +7,31 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
-// -----------
-// SQL Connection
-var mysql = require('mysql');
-var session = require('express-session');
-var MySQLStore = require('express-mysql-session')(session);
-var options = {
-    host: 'localhost',    
-    user: 'rootapi',
-    password: 'rootuser',  
-    port: 3306
-};
-var connection = mysql.createConnection(options); // or mysql.createPool(options);
-var sessionStore = new MySQLStore({}/* session store options */, connection);
-// ---------
+const bodyParser=require('body-parser');
+
+const authenticateController=require('./controllers/authenticate-controller');
+const registerController=require('./controllers/register-controller');
+
+
 const app = express()
 const port = 3000
+
+
 
 // middleware para loggear los eventos del servidor
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
  
 app.get('/', (req, res) => {
   res.send('<h1>Servidor funcionando</h1>')
 })
 
 // Crear nuevo usuario
+app.post('/api/register',registerController.register);
+
 
 // Autenticar usuario
 app.post('/api/auth/login', (req, res)=> {

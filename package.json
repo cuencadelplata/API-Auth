@@ -4,6 +4,7 @@
   "description": "API para la autenticación del chat UCP",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0"

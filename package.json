@@ -1,0 +1,27 @@
+{
+  "name": "api-auth",
+  "version": "1.0.0",
+  "description": "API para la autenticación del chat UCP",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ejricciardi/API-Auth.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ejricciardi/API-Auth/issues"
+  },
+  "homepage": "https://github.com/ejricciardi/API-Auth#readme"
+}

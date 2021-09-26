@@ -8,9 +8,12 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 const bodyParser=require('body-parser');
+const bcrypt = require('bcrypt');
+var connection = require('./config');
 
-const authenticateController=require('./controllers/authenticate-controller');
-const registerController=require('./controllers/register-controller');
+//const authenticateController = require('./controllers/authenticate-controller');
+const registerController = require('./controllers/register-controller');
+
 
 
 const app = express()
@@ -33,13 +36,16 @@ app.get('/', (req, res) => {
 app.post('/api/register',registerController.register);
 
 
+
 // Autenticar usuario
+
 app.post('/api/auth/login', (req, res)=> {
     let usuario = req.body.usuario;
     let password = req.body.password;
-    
-    if (esValido(usuario,password)===true){
-        console.log('Entrando al generador');
+    console.log(usuario);
+    console.log(password);    
+    if (esValido(usuario, password)){
+        console.log('Logeando....');
         jwt.sign({usuario}, 'secretkey', (err, token)=>{
             res.json({
                 token
@@ -51,17 +57,40 @@ app.post('/api/auth/login', (req, res)=> {
     }
 })
 
-function esValido(usuario, password){    
-    console.log(usuario);
-    console.log(password);
-    console.log((usuario==password));
-/* 
-    if (usuario !== '' || password !== ''){
-        return (false);
-    }
-*/   
-    return (usuario==password);
+// ---------------------------------------------------------------------------------------
+// no funciona como debería
+function esValido(usuario, password){
+    let veri = false;
+    console.log('Verificando contraseña...');
+    var sql='SELECT * FROM usuario WHERE usuarioNombre =?';
+    console.log(usuario, password);
+    // -----------------------------------------------------------------------------
+    // esto lo ejecuta después de lo debido
+    connection.query(sql, usuario, function (err, result, fields) {
+        console.log('Comparando Datos...');             
+        Object.keys(result).forEach(function(key) {
+            var row = result[key];  
+            console.log('Veri antes de iniciar');
+            console.log(veri);          
+            console.log('Iteracion:');
+            console.log(key);
+            console.log(row.usuarioId);
+            console.log(row.usuarioNombre);
+            console.log(row.passwordHash);
+            console.log(row.passwordSalt);
+            if (veri==false){
+                veri = bcrypt.compareSync(password, row.passwordHash);
+                console.log('se imprime veri por unica vez a menos que de falso');
+                console.log(veri);
+            }  
+          });         
+    })   
+    // -----------------------------------------------------------------------------
+    console.log('se imprime veri antes de retornar');
+    console.log(veri);
+    return veri
 }
+// ---------------------------------------------------------------------------------------
 
 // Genera un nuevo token
 app.post('/auth/generarToken', (req, res)=> {
